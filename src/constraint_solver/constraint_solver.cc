@@ -40,10 +40,10 @@
 #include "util/tuple_set.h"
 
 // These flags are used to set the fields in the DefaultSolverParameters proto.
-DEFINE_bool(cp_trace_propagation, true,
+DEFINE_bool(cp_trace_propagation, false,
             "Trace propagation events (constraint and demon executions,"
             " variable modifications).");
-DEFINE_bool(cp_trace_search, true, "Trace search events");
+DEFINE_bool(cp_trace_search, false, "Trace search events");
 DEFINE_bool(cp_print_added_constraints, false,
             "show all constraints added to the solver.");
 DEFINE_bool(cp_print_model, false,

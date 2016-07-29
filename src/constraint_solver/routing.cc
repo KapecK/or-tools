@@ -3667,10 +3667,8 @@ Assignment* RoutingModel::DoRestoreAssignment() {
 bool RoutingModel::RoutesToAssignment(const std::vector<std::vector<NodeIndex>>& routes,
                                       bool ignore_inactive_nodes,
                                       bool close_routes,
-                                      Assignment* const assignment) const {
-			LOG(ERROR) << "Test Logs in routes to assignment";						  
+                                      Assignment* const assignment) const {			  
   CHECK(assignment != nullptr);
-  LOG(ERROR) << "After check";	
   if (!closed_) {
     LOG(ERROR) << "The model is not closed yet";
     return false;
@@ -3681,9 +3679,7 @@ bool RoutingModel::RoutesToAssignment(const std::vector<std::vector<NodeIndex>>&
                << ") is greater than the number of vehicles in the model ("
                << vehicles_ << ")";
     return false;
-  }
-  
-  LOG(ERROR) << "After num";	
+  }	
 
   hash_set<int> visited_indices;
   // Set value to NextVars based on the routes.
@@ -3697,20 +3693,17 @@ bool RoutingModel::RoutesToAssignment(const std::vector<std::vector<NodeIndex>>&
                  << vehicle << ") was already used";
       return false;
     }
-	LOG(ERROR) << "After index already use";	
 
     for (const NodeIndex to_node : route) {
       if (to_node < 0 || to_node >= nodes()) {
         LOG(ERROR) << "Invalid node index: " << to_node;
         return false;
       }
-	  LOG(ERROR) << "After invalid index node";	
       const int to_index = NodeToIndex(to_node);
       if (to_index < 0 || to_index >= Size()) {
         LOG(ERROR) << "Invalid index: " << to_index << " from node " << to_node;
         return false;
       }
-	  LOG(ERROR) << "After invalid index from node";
 
       IntVar* const active_var = ActiveVar(to_index);
       if (active_var->Max() == 0) {
@@ -3722,7 +3715,6 @@ bool RoutingModel::RoutesToAssignment(const std::vector<std::vector<NodeIndex>>&
           return false;
         }
       }
-	  LOG(ERROR) << "After node is not active";
 
       insert_result = visited_indices.insert(to_index);
       if (!insert_result.second) {
@@ -3731,7 +3723,6 @@ bool RoutingModel::RoutesToAssignment(const std::vector<std::vector<NodeIndex>>&
         return false;
       }
 	  
-	  LOG(ERROR) << "After node is used multiple times";
 
       const IntVar* const vehicle_var = VehicleVar(to_index);
       if (!vehicle_var->Contains(vehicle)) {
@@ -3739,8 +3730,6 @@ bool RoutingModel::RoutesToAssignment(const std::vector<std::vector<NodeIndex>>&
                    << to_index << " (node " << to_node << ")";
         return false;
       }
-	  
-	  LOG(ERROR) << "After vehicle is not allowed at index";
 
       IntVar* const from_var = NextVar(from_index);
       if (!assignment->Contains(from_var)) {
@@ -3749,7 +3738,6 @@ bool RoutingModel::RoutesToAssignment(const std::vector<std::vector<NodeIndex>>&
       assignment->SetValue(from_var, to_index);
 
       from_index = to_index;
-	  LOG(ERROR) << "After next var";
     }
 
     if (close_routes) {
@@ -3760,7 +3748,6 @@ bool RoutingModel::RoutesToAssignment(const std::vector<std::vector<NodeIndex>>&
       assignment->SetValue(last_var, End(vehicle));
     }
 	
-	LOG(ERROR) << "After end!";
   }
 
   // Do not use the remaining vehicles.
@@ -3810,7 +3797,6 @@ Assignment* RoutingModel::ReadAssignmentFromRoutes(
   // DoRestoreAssignment() might still fail when checking constraints (most
   // constraints are not verified by RoutesToAssignment) or when filling in
   // dimension variables.
-  LOG(ERROR) << "before do restore assignment!";
   return DoRestoreAssignment();
 }
 
